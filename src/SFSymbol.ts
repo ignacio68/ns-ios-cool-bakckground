@@ -4,6 +4,10 @@ const symbolProperty: Property<SFSymbol, string> = new Property<SFSymbol, string
   name: "symbol"
 });
 
+// const scaleProperty: Property<SFSymbol, number> = new Property<SFSymbol, string>({
+//   name: "scale"
+// });
+
 export class SFSymbol extends Image {
   createNativeView() {
     return UIImageView.new();

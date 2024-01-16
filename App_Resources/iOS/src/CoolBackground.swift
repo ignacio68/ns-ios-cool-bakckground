@@ -1,4 +1,4 @@
-//
+
 //  Space.swift
 //  Cool Loaders
 //
@@ -7,7 +7,13 @@
 
 import SwiftUI
 
+class CoolBackgroundProps: ObservableObject {
+    // @Published var props: NSMutableDictionary = [:]
+    @Published var mode = "stars"
+}
+
 struct CoolBackground: View {
+    @ObservedObject var props = CoolBackgroundProps()
 
     var shaderColor: Shader {
         let function = ShaderFunction(
@@ -26,45 +32,46 @@ struct CoolBackground: View {
     @State private var xOffset = -500.0 // Start offscreen to the left
 
     var body: some View {
-                        ZStack{
-                            TimelineView(.animation) { context in
+        ZStack{
+            if props.mode == "stars" {
+                TimelineView(.animation) { context in
+
                                 Rectangle()
                                     .foregroundStyle(.white)
                                     .starField(
                                         seconds: context.date.timeIntervalSince1970 - self.start.timeIntervalSince1970
                                     )
-                                    // .circleLoader(
-                                    //     seconds: context.date.timeIntervalSince1970 - self.start.timeIntervalSince1970
-                                    // )
-                            }
-                        }
-                        // .frame(width: 400, height: 400)
-                    }
+                                    // .frame(width: 400, height: 400)
+                }
+            }
+
+             else {
+                TimelineView(.animation) { context in
+
+                                Rectangle()
+                                    .foregroundStyle(.white)
+                                    .circleLoader(
+                                        seconds: context.date.timeIntervalSince1970 - self.start.timeIntervalSince1970
+                                    )
+                                    // .frame(width: 400, height: 400)
+                }
+            }
+
+
+                // if props.mode == "circles" {
+                //                 Rectangle()
+                //                     .foregroundStyle(.white)
+                //                     .circleLoader(
+                //                         seconds: context.date.timeIntervalSince1970 - self.start.timeIntervalSince1970
+                //                     )
+                //                     // .frame(width: 400, height: 400)
+                //             }
+            // }
+        }
+    }
 }
 // Nativescript
-@objc
-class CoolBackgroundProvider: UIViewController, SwiftUIProvider {
-    private var swiftUI: CoolBackground?
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    required public init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        swiftUI = CoolBackground()
-        setupSwiftUIView(content: swiftUI)
-    }
-
-    /// Receive data from NativeScript
-    func updateData(data: NSDictionary) {}
-    /// Allow sending of data to NativeScript
-    var onEvent: ((NSDictionary) -> ())?
-}
 
 
 extension View {
